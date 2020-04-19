@@ -1,7 +1,11 @@
-import express from 'express'; 
+import express, { response } from 'express';
 
 const app = express();
 
+app.get('/', (request, response) => {
+  response.json({message: "Hello TypeScript Project!!!!"})
+});
+
 app.listen(3333, () => {
-  console.log('👾️ Servidor Back-end inicializado!');
+  console.log('👾️ Backend server started! 👾️');
 });
