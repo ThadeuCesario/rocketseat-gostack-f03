@@ -1,11 +1,6 @@
 import { Router } from 'express';
 
 /**
- * O uuid é uma biblioteca que é responsável por gerar um id único universal e individual
- */
-import { uuid } from 'uuidv4';
-
-/**
  * Utilizando o como yarn add date-fns, estamos importando essa biblioteca que
  * podemos trabalhar com horas dentro do javascript.
  *
@@ -19,18 +14,9 @@ import { uuid } from 'uuidv4';
  * O terceiro elemento será responsável por realizar a comparação entre datas.
  */
 import { startOfHour, parseISO, isEqual } from 'date-fns';
+import Appointment from '../models/Appointment';
 
 const appoinmentsRouter = Router();
-
-/**
- * Definimos sempre uma interface quando queremos definir tipagem de uma informação
- * composta.
- */
-interface Appointment {
-  id: string;
-  provider: string;
-  date: Date;
-}
 
 /**
  * Assim adicionamos a tipagem dentro do array de appointments.
@@ -68,11 +54,7 @@ appoinmentsRouter.post('/', (request, response) => {
       .json({ message: 'This appointment is already booked!' });
   }
 
-  const appointment = {
-    id: uuid(),
-    provider,
-    date: parsedDate,
-  };
+  const appointment = new Appointment(provider, date);
 
   appointments.push(appointment);
 
