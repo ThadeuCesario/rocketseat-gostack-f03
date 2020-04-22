@@ -15,12 +15,28 @@ import { uuid } from 'uuidv4';
  * O Segundo elemento que importamos é o parseISO, que será responsável por
  * converter uma string (a forma que estamos enviando atuamente), em um elemento
  * Date nativo do javascript.
+ *
+ * O terceiro elemento será responsável por realizar a comparação entre datas.
  */
-import { startOfHour, parseISO, parse } from 'date-fns';
+import { startOfHour, parseISO, isEqual } from 'date-fns';
 
 const appoinmentsRouter = Router();
 
-const appointments = [];
+/**
+ * Definimos sempre uma interface quando queremos definir tipagem de uma informação
+ * composta.
+ */
+interface Appointment {
+  id: string;
+  provider: string;
+  date: Date;
+}
+
+/**
+ * Assim adicionamos a tipagem dentro do array de appointments.
+ * Veja que precisamos criar uma interface para isso.
+ */
+const appointments: Appointment[] = [];
 
 appoinmentsRouter.post('/', (request, response) => {
   const { provider, date } = request.body;
@@ -35,12 +51,31 @@ appoinmentsRouter.post('/', (request, response) => {
    */
   const parsedDate = startOfHour(parseISO(date));
 
+  /**
+   * Essa variável será responsável por encontrar um agendamento na mesma data.
+   */
+  const findAppointmentInSameDate = appointments.find(appointment =>
+    /**
+     * Essa função ira comparar o parsedDate com o appointment.date, se for
+     * será retornado o appointment para dentro da variável.
+     */
+    isEqual(parsedDate, appointment.date)
+  );
+
+  if (findAppointmentInSameDate) {
+    return response
+      .status(400)
+      .json({ message: 'This appointment is already booked!' });
+  }
+
   const appointment = {
     id: uuid(),
     provider,
-    parsedDate,
+    date: parsedDate,
   };
+
   appointments.push(appointment);
+
   return response.json(appointment);
 });
 
