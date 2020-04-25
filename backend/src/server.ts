@@ -6,6 +6,9 @@
  * Passei duas propriedades para o script também, a primeira é o transpileOnly que
  * passará a não verificar se há erros em nosso código. E a segunda é a ignore-watch node_modules
  * para que a pasta node_modules seja ignorada.
+ *
+ * EditorConfig -> Ferramenta responsável por padronizar configurações entre diferentes
+ * editores de código.
  */
 
 import express from 'express';
