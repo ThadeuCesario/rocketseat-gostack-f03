@@ -7,6 +7,7 @@
  * que gerado (independente se for GET, POST, PUT, DELETE).
  * Será repassado para dentro do appointmentsRouter; Portanto em nosso arquivo
  * appointments.routes.ts, independete da requisição sempre utilizaremos barra.
+ *
  */
 
 import { Router } from 'express';

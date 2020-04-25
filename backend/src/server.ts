@@ -21,6 +21,7 @@
  *
  * Prettier -> Configurações para melhorar a formatação de nosso código.
  * Conseguimos integrar o prettier com o eslint e aplicar correções automática em nosso código
+ *
  */
 
 import express from 'express';
