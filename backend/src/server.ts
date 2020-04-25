@@ -14,13 +14,18 @@
  * Após a configuração do ESLint é necessário acessar o settings.json e colocar
  * as configurações para que a correção do ESLint seja aplicada automaticamente
  * após o código ser salvo.
+ *
+ * Estamos utilizando um plugin do ESLint que se chama.
+ * 'eslint-import-resolver-typescript', que será responsável de habilitar para o código
+ * entender as importações de arquivos typescript;
  */
 
 import express from 'express';
+import routes from './routes';
 
 const app = express();
 
-app.get('/', (request, response) => response.json({ message: 'Hello GoStaaaaaaaaaaaaaaaaack' }));
+app.use(routes);
 
 app.listen(3333, () => {
   console.log('Server back-end started!');
