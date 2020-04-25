@@ -9,16 +9,19 @@
  *
  * EditorConfig -> Ferramenta responsável por padronizar configurações entre diferentes
  * editores de código.
+ *
+ * ESLint -> Irá nos auxiliar a automatizar os padrões de código em nosso projeto.
+ * Após a configuração do ESLint é necessário acessar o settings.json e colocar
+ * as configurações para que a correção do ESLint seja aplicada automaticamente
+ * após o código ser salvo.
  */
 
 import express from 'express';
 
 const app = express();
 
-app.get('/', (request, response) => {
-  return response.json({message: 'Hello GoStack'});
-})
+app.get('/', (request, response) => response.json({ message: 'Hello GoStaaaaaaaaaaaaaaaaack' }));
 
 app.listen(3333, () => {
-  console.log('Server back-end started!')
+  console.log('Server back-end started!');
 });
