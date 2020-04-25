@@ -18,6 +18,9 @@
  * Estamos utilizando um plugin do ESLint que se chama.
  * 'eslint-import-resolver-typescript', que será responsável de habilitar para o código
  * entender as importações de arquivos typescript;
+ *
+ * Prettier -> Configurações para melhorar a formatação de nosso código.
+ * Conseguimos integrar o prettier com o eslint e aplicar correções automática em nosso código
  */
 
 import express from 'express';
@@ -28,5 +31,5 @@ const app = express();
 app.use(routes);
 
 app.listen(3333, () => {
-  console.log('Server back-end started!');
+    console.log('Server back-end started!');
 });
