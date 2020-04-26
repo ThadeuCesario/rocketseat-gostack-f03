@@ -31,7 +31,8 @@
  * SoC => Separation of Concerns (Separação de preocupações).
  *
  * Quanto passamos a informação se um arquivo para outro chamamos de DTO -
- * Data Transfer Object
+ * Data Transfer Object. Para transferir dados de um arquivo para outro, é sempre
+ * interessante utilizarmos os objetos do Javascript.
  */
 
 import { Router } from 'express';
@@ -59,7 +60,10 @@ appointmentsRouter.post('/', (request, response) => {
             .json({ message: 'This appointment is already booked' });
     }
 
-    const appointment = appointmentsRepository.create(provider, parsedDate);
+    const appointment = appointmentsRepository.create({
+        provider,
+        date: parsedDate,
+    });
 
     return response.json(appointment);
 });

@@ -10,10 +10,18 @@
  * Estamos utilizando o private pois significa que é uma variável que não é acessada
  * por fora da classe.
  *
- * Relembrando que esse arquivo é responsável por tudo que vamos mexer nos dados
+ * Relembrando que esse arquivo é responsável por tudo que vamos mexer nos dados.
+ *
+ * Aplicamos uma modificação dentro da função de 'create'. Para não termos parametros
+ * de forma fixa, estou mandando um 'data' que é uma DTO. Data Transfer Object.
  */
 import { isEqual } from 'date-fns';
 import Appointment from '../models/Appointment';
+
+interface CreateAppointmentDTO {
+    provider: string;
+    date: Date;
+}
 
 class AppointmentsRepository {
     private appointments: Appointment[];
@@ -30,8 +38,8 @@ class AppointmentsRepository {
         return findAppointment || null;
     }
 
-    public create(provider: string, date: Date): Appointment {
-        const appointment = new Appointment(provider, date);
+    public create({ provider, date }: CreateAppointmentDTO): Appointment {
+        const appointment = new Appointment({ provider, date });
 
         this.appointments.push(appointment);
 
