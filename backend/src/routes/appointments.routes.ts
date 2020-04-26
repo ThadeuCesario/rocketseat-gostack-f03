@@ -33,11 +33,27 @@
  * Quanto passamos a informação se um arquivo para outro chamamos de DTO -
  * Data Transfer Object. Para transferir dados de um arquivo para outro, é sempre
  * interessante utilizarmos os objetos do Javascript.
+ *
+ * Nossas rotas devem ter a responsabilidade de:
+ * Receber a requisição, chamar outro arquivo para tratar a requisição e devolver
+ * a resposta. Qualquer coisa que tivermos além disso dentro de um rota, precisaremos
+ * abstrair dentro de um service.
+ *
+ * Não podemos confundir transformação de dados, com regras de negócios.
+ * Por exemplo, parseISO apenas está transformando o dado. Isto é,
+ * ele pega uma string e transforma essa string para o tipo Date do javascript.
+ * Porém o startOfHour, já se trata de uma regra de negócio. Pois a regra de agendamento
+ * está ocorrendo de hora em hora.
+ *
+ * SOLID
+ *    -> Single Responsability Principle
+ *    -> Dependency Invertion Principle
  */
 
-import { Router } from 'express';
+import { Router, json } from 'express';
 import { startOfHour, parseISO } from 'date-fns';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import CreateAppointmentService from '../services/CreateAppointmentService';
 
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
@@ -48,24 +64,22 @@ appointmentsRouter.get('/', (request, response) => {
 });
 
 appointmentsRouter.post('/', (request, response) => {
-    const { provider, date } = request.body;
-    const parsedDate = startOfHour(parseISO(date));
-    const findAppointmentInSameDate = appointmentsRepository.findByDate(
-        parsedDate,
-    );
+    try {
+        const { provider, date } = request.body;
+        const parsedDate = parseISO(date);
+        const createAppointment = new CreateAppointmentService(
+            appointmentsRepository,
+        );
 
-    if (findAppointmentInSameDate) {
-        return response
-            .status(400)
-            .json({ message: 'This appointment is already booked' });
+        const appointment = createAppointment.execute({
+            provider,
+            date: parsedDate,
+        });
+
+        return response.json(appointment);
+    } catch (error) {
+        return response.status(400).json({ error: error.message });
     }
-
-    const appointment = appointmentsRepository.create({
-        provider,
-        date: parsedDate,
-    });
-
-    return response.json(appointment);
 });
 
 export default appointmentsRouter;

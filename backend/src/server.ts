@@ -22,6 +22,10 @@
  * Prettier -> Configurações para melhorar a formatação de nosso código.
  * Conseguimos integrar o prettier com o eslint e aplicar correções automática em nosso código
  *
+ *
+ * Model -> A representação de como um dado é salvo dentro de nossa aplicação.
+ * Repositório -> Responsável por trabalhar com o dado (CRUD)
+ * Service -> Reponsável por armazernar a regra de negócio de nossa aplicação.
  */
 
 import express from 'express';
