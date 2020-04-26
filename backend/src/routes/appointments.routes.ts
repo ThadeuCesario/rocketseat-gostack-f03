@@ -29,6 +29,9 @@
  * A rota não tem responsabilidade de se conectar com a fonte de dados de nossa aplicação.
  *
  * SoC => Separation of Concerns (Separação de preocupações).
+ *
+ * Quanto passamos a informação se um arquivo para outro chamamos de DTO -
+ * Data Transfer Object
  */
 
 import { Router } from 'express';
