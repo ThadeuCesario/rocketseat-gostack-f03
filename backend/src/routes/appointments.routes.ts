@@ -25,6 +25,10 @@
  *
  * Utilizamos interface sempre que precisamos ter tipagem em um elemento composto.
  * Veja nesse exemplo o array de appointments que possui interface.
+ *
+ * A rota não tem responsabilidade de se conectar com a fonte de dados de nossa aplicação.
+ *
+ * SoC => Separation of Concerns (Separação de preocupações).
  */
 
 import { Router } from 'express';
@@ -34,11 +38,14 @@ import AppointmentsRepository from '../repositories/AppointmentsRepository';
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
 
+appointmentsRouter.get('/', (request, response) => {
+    const appointments = appointmentsRepository.all();
+    return response.json(appointments);
+});
+
 appointmentsRouter.post('/', (request, response) => {
     const { provider, date } = request.body;
-
     const parsedDate = startOfHour(parseISO(date));
-
     const findAppointmentInSameDate = appointmentsRepository.findByDate(
         parsedDate,
     );
