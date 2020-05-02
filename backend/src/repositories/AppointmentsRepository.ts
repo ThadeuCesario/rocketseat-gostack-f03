@@ -14,40 +14,22 @@
  *
  * Aplicamos uma modificação dentro da função de 'create'. Para não termos parametros
  * de forma fixa, estou mandando um 'data' que é uma DTO. Data Transfer Object.
+ *
+ * O entityRepository iremos utilizar como um decorator sobre o nome repositorio
+ *
+ * O retorno de uma função assincrona sempre será uma promise.
  */
-import { isEqual } from 'date-fns';
+import { EntityRepository, Repository, Entity } from 'typeorm';
 import Appointment from '../models/Appointment';
 
-interface CreateAppointmentDTO {
-    provider: string;
-    date: Date;
-}
-
-class AppointmentsRepository {
-    private appointments: Appointment[];
-
-    constructor() {
-        this.appointments = [];
-    }
-
-    public findByDate(date: Date): Appointment | null {
-        const findAppointment = this.appointments.find(appointment =>
-            isEqual(date, appointment.date),
-        );
+@EntityRepository(Appointment)
+class AppointmentsRepository extends Repository<Appointment> {
+    public async findByDate(date: Date): Promise<Appointment | null> {
+        const findAppointment = await this.findOne({
+            where: { date },
+        });
 
         return findAppointment || null;
-    }
-
-    public create({ provider, date }: CreateAppointmentDTO): Appointment {
-        const appointment = new Appointment({ provider, date });
-
-        this.appointments.push(appointment);
-
-        return appointment;
-    }
-
-    public all(): Appointment[] {
-        return this.appointments;
     }
 }
 export default AppointmentsRepository;

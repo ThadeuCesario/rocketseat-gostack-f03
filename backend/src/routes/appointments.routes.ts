@@ -48,30 +48,36 @@
  * SOLID
  *    -> Single Responsability Principle
  *    -> Dependency Invertion Principle
+ *
+ * Quando trabalhamos com interação em banco de dados devemos utilizar o async e
+ * await. Lembrando que retorna uma promise e essas interações demoram um pouco
+ * para serem executadas.
  */
 
 import { Router, json } from 'express';
 import { startOfHour, parseISO } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
+import Appointment from '../models/Appointment';
 
 const appointmentsRouter = Router();
-const appointmentsRepository = new AppointmentsRepository();
 
-appointmentsRouter.get('/', (request, response) => {
-    const appointments = appointmentsRepository.all();
+appointmentsRouter.get('/', async (request, response) => {
+    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+    const appointments = await appointmentsRepository.find();
     return response.json(appointments);
 });
 
-appointmentsRouter.post('/', (request, response) => {
+appointmentsRouter.post('/', async (request, response) => {
     try {
         const { provider, date } = request.body;
-        const parsedDate = parseISO(date);
-        const createAppointment = new CreateAppointmentService(
-            appointmentsRepository,
-        );
 
-        const appointment = createAppointment.execute({
+        const parsedDate = parseISO(date);
+
+        const createAppointment = new CreateAppointmentService();
+
+        const appointment = await createAppointment.execute({
             provider,
             date: parsedDate,
         });

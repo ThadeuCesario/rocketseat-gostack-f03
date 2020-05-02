@@ -13,8 +13,12 @@
  * sempre que o service tiver uma dependência externa, como por exemplo o
  * 'appointmentsRepository' ao invés de instaciarmos a classe dentro do service,
  * vamos receber esse appointmentsRepository como um parâmetro da nossa classe.
+ *
+ * Toda função assincrona retorna uma promise, e o que passarmos dentro do <>
+ * será o tipo de retorno que aquela função fornecerá.
  */
 import { startOfHour } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
 import Appointment from '../models/Appointment';
 import AppoinmentsRepository from '../repositories/AppointmentsRepository';
 
@@ -24,16 +28,14 @@ interface Request {
 }
 
 class CreateAppointmentService {
-    private appointmentsRepository: AppoinmentsRepository;
+    public async execute({ provider, date }: Request): Promise<Appointment> {
+        const appointmentsRepository = getCustomRepository(
+            AppoinmentsRepository,
+        ); // appointmentsRepository possúi os métodos que podemos executar
 
-    constructor(appointmentsRepository: AppoinmentsRepository) {
-        this.appointmentsRepository = appointmentsRepository;
-    }
-
-    public execute({ provider, date }: Request): Appointment {
         const appointmentDate = startOfHour(date);
 
-        const findAppointmentInSameDate = this.appointmentsRepository.findByDate(
+        const findAppointmentInSameDate = await appointmentsRepository.findByDate(
             appointmentDate,
         );
 
@@ -42,10 +44,12 @@ class CreateAppointmentService {
             throw Error('This appointment is already booked');
         }
 
-        const appointment = this.appointmentsRepository.create({
+        const appointment = appointmentsRepository.create({
             provider,
             date: appointmentDate,
         });
+
+        await appointmentsRepository.save(appointment);
 
         return appointment;
     }

@@ -28,6 +28,7 @@
  * Service -> Reponsável por armazernar a regra de negócio de nossa aplicação.
  */
 
+import 'reflect-metadata';
 import express from 'express';
 import routes from './routes';
 import './database';
