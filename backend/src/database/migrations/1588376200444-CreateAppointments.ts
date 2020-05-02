@@ -36,12 +36,21 @@ export default class CreateAppointments1588376200444
                     {
                         name: 'provider',
                         type: 'varchar',
-                        isNullable: false,
                     },
                     {
                         name: 'date',
                         type: 'timestamp with time zone', // Além do horário, vai gravar o fuso horario
                         isNullable: false,
+                    },
+                    {
+                        name: 'created_at',
+                        type: 'timestamp',
+                        default: 'now()',
+                    },
+                    {
+                        name: 'updated_at',
+                        type: 'timestamp',
+                        default: 'now()',
                     },
                 ],
             }),

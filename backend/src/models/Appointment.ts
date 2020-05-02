@@ -25,12 +25,13 @@
  * Então não precisamos manter o constructor.
  */
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
-interface ModelAppointmentDTO {
-    provider: string;
-    date: Date;
-}
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('appointments')
 class Appointment {
@@ -42,6 +43,12 @@ class Appointment {
 
     @Column('timestamp with time zone')
     date: Date;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
 }
 
 export default Appointment;
