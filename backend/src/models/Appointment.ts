@@ -11,27 +11,37 @@
  * Entretanto no caso dos models precisamos tomar um cuidado para que no constructor
  * não seja referenciado o id, para isso utilizamos o Omit<Appointment, 'id'>
  * Dessa forma estamos omitindo o valor do Id.
+ *
+ * Precisamos informar que nosso appointment está relacionado com uma tabela de
+ * nosso banco de dados.
+ * Entity no ORM consideramos tudo aquilo que será salvo no banco de dados.
+ *
+ * LIberando o decorator no tsconfig podemos utilizar o @Entity() logo acima
+ * da classe. Dessa forma é como se passassemos a classe como parâmetro.
+ *
+ * 'PrimaryGeneratedColumn' -> Vamos utilizar para o id, porque o id é a chave primaria.
+ *
+ * Quando criamos uma entidade do TypeORM o constructor é criado de forma automática.
+ * Então não precisamos manter o constructor.
  */
 
-import { uuid } from 'uuidv4';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 interface ModelAppointmentDTO {
     provider: string;
     date: Date;
 }
 
+@Entity('appointments')
 class Appointment {
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Column()
     provider: string;
 
+    @Column('timestamp with time zone')
     date: Date;
-
-    constructor({ provider, date }: Omit<Appointment, 'id'>) {
-        this.id = uuid();
-        this.provider = provider;
-        this.date = date;
-    }
 }
 
 export default Appointment;
