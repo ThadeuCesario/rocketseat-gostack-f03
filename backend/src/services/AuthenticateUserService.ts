@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+import { sign, verify } from 'jsonwebtoken'; // Vamos 'assinar' um token.
 import { compare } from 'bcryptjs';
 import User from '../models/User';
 
@@ -9,6 +10,7 @@ interface Request {
 
 interface Response {
     user: User;
+    token: string;
 }
 
 class AuthenticateUserService {
@@ -32,10 +34,28 @@ class AuthenticateUserService {
             throw new Error('Incorrect email/password combination!');
         }
 
-        // Usuário autenticado
+        /**
+         * sign -> é um método sincrono, por isso não precisamos do await.
+         *
+         * O primeiro parâmetro são informações do usuário que podemos utilizar
+         * posteriormente. Payload, ficará dentro do token, mas não é seguro.
+         * Pois qualquer pessoa consegue descriptografar.
+         *
+         * O segundo parâmetro é uma chave secreta.
+         * http://www.md5.cz/
+         *
+         * O terceiro parâmetro são algumas configurações de nosso token.
+         * 1) subject -> id do usuário que gerou o token.
+         * 2) expiresIn -> O tempo de duração desse token.
+         */
+        const token = sign({}, '2564f1969e849ab467b3072f875cae28', {
+            subject: user.id,
+            expiresIn: '1d',
+        }); // é um método sincrono
 
         return {
             user,
+            token,
         };
     }
 }
