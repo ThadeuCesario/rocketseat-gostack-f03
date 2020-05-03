@@ -28,7 +28,7 @@ export default class CreateAppointments1588376200444
                 columns: [
                     {
                         name: 'id',
-                        type: 'varchar', // vamos utilizar aqui o uuid por isso seguiremos com varchar
+                        type: 'uuid', // vamos utilizar aqui o uuid por isso seguiremos com varchar
                         isPrimary: true, // PrimaryKey
                         generationStrategy: 'uuid',
                         default: 'uuid_generate_v4()',
