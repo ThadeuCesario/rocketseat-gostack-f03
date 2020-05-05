@@ -59,9 +59,16 @@ import { startOfHour, parseISO } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
-import Appointment from '../models/Appointment';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const appointmentsRouter = Router();
+
+/**
+ * Lembrando que o use é chamado antes de qualquer request.
+ * Então no caso abaixo estou aplicando o middle de ensureAuthenticated,
+ * em todas as rotas de agendamento.
+ */
+appointmentsRouter.use(ensureAuthenticated);
 
 appointmentsRouter.get('/', async (request, response) => {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);

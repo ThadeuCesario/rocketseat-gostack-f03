@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { sign, verify } from 'jsonwebtoken'; // Vamos 'assinar' um token.
 import { compare } from 'bcryptjs';
 import User from '../models/User';
+import authConfig from '../config/auth';
 
 interface Request {
     email: string;
@@ -48,9 +49,12 @@ class AuthenticateUserService {
          * 1) subject -> id do usuário que gerou o token.
          * 2) expiresIn -> O tempo de duração desse token.
          */
-        const token = sign({}, '2564f1969e849ab467b3072f875cae28', {
+
+        const { secret, expiresIn } = authConfig.jwt;
+
+        const token = sign({}, secret, {
             subject: user.id,
-            expiresIn: '1d',
+            expiresIn,
         }); // é um método sincrono
 
         return {
