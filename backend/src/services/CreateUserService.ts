@@ -17,6 +17,8 @@ class CreateUserService {
             where: { email },
         });
 
+        console.log(checkUserExists);
+
         if (checkUserExists) {
             throw new AppError('Email address already used.'); // Service não conecta diretamente com o response, por isso dispara um erro.
         }
